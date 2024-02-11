@@ -9,11 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Database interface {
-	AddUser(name string, rollNo int, contactNo int, email string, id string) error
-	// Add other database methods as needed
-}
-
 type Student struct {
 	Name      string `json:"name"`
 	RollNo    int    `json:"rollno"`
