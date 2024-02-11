@@ -1,4 +1,3 @@
-// main_test.go
 package main_test
 
 import (
@@ -17,18 +16,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
-	// "github.com/yourusername/yourproject/database"
-	// "github.com/yourusername/yourproject/main"
 )
 
 func TestMain(m *testing.M) {
-	// Setup logic here, including database connection
+	// Set up database connection here first, without connection to the origional database it will not work
 	database.ConnectDatabase()
 
 	// Run tests
 	exitCode := m.Run()
-
-	// Teardown logic here
 
 	// Exit with the test status code
 	os.Exit(exitCode)
@@ -39,7 +34,7 @@ func TestGetAllStudents(t *testing.T) {
 	mockDB := databasemock.NewMockDatabase(t)
 
 	// Set expectations for the Query method
-	mockRows := &sql.Rows{} // You can create mock rows based on your needs
+	mockRows := &sql.Rows{} // create mock rows 
 	mockDB.On("Query", "SELECT * FROM students").Return(mockRows, nil)
 
 	// Create a mock Gin context for testing
@@ -51,17 +46,14 @@ func TestGetAllStudents(t *testing.T) {
 	// Check the response
 	assert.Equal(t, http.StatusOK, ctx.Writer.Status())
 
-	// Add more assertions based on your expected behavior
 }
 
 func TestAddStudent(t *testing.T) {
-	// Create an instance of the MockDatabase
 	mockDB := databasemock.NewMockDatabase(t)
 
-	// Create a mock Gin context for testing
 	ctx, _ := gin.CreateTestContext(httptest.NewRecorder())
 
-	// Prepare a sample student data
+	// sample student data
 	stu := main.Student{
 		Name:      "John Doe",
 		RollNo:    123,
@@ -85,17 +77,13 @@ func TestAddStudent(t *testing.T) {
 	// Check the response
 	assert.Equal(t, http.StatusOK, ctx.Writer.Status())
 
-	// Add more assertions based on your expected behavior
 }
 
 func TestUpdateUser(t *testing.T) {
-	// Create an instance of the MockDatabase
 	mockDB := databasemock.NewMockDatabase(t)
 
-	// Create a mock Gin context for testing
 	ctx, _ := gin.CreateTestContext(httptest.NewRecorder())
 
-	// Prepare a sample student data for update
 	stu := main.Student{
 		Name:      "Updated Name",
 		RollNo:    456,
@@ -104,10 +92,8 @@ func TestUpdateUser(t *testing.T) {
 		ID:        "xyz789",
 	}
 
-	// Convert student data to JSON
 	jsonData, _ := json.Marshal(stu)
 
-	// Set the request body with updated student data
 	ctx.Request = httptest.NewRequest("PUT", fmt.Sprintf("/updateStudent/%s", stu.ID), strings.NewReader(string(jsonData)))
 
 	// Set up the mock database expectations for the transaction and update
@@ -125,17 +111,13 @@ func TestUpdateUser(t *testing.T) {
 	// Call the UpdateUser function with the mock context and mockDB
 	main.UpdateUser(ctx)
 
-	// Check the response
 	assert.Equal(t, http.StatusOK, ctx.Writer.Status())
-
-	// Add more assertions based on your expected behavior
+	
 }
 
 func TestDeleteStudent(t *testing.T) {
-	// Create an instance of the MockDatabase
 	mockDB := databasemock.NewMockDatabase(t)
 
-	// Create a mock Gin context for testing
 	ctx, _ := gin.CreateTestContext(httptest.NewRecorder())
 
 	// Set the request parameter with a sample student ID
@@ -149,8 +131,6 @@ func TestDeleteStudent(t *testing.T) {
 	// Call the DeleteStudent function with the mock context and mockDB
 	main.DeleteStudent(ctx)
 
-	// Check the response
 	assert.Equal(t, http.StatusOK, ctx.Writer.Status())
 
-	// Add more assertions based on your expected behavior
 }
